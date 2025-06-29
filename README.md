@@ -438,6 +438,6 @@ This project is licensed under the [CC BY-NC 4.0](https://creativecommons.org/li
 
 ---
 
-&nbsp;
+**Author:** [Cainã Max Couto da Silva](https://www.linkedin.com/in/cmcouto-silva/)
 
 **Built with ❤️ for the research community!**
