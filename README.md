@@ -2,7 +2,8 @@
 
 **A Lab Research AI Assistant for Papers and Media Coverage**
 
-LabRAG is an intelligent chatbot that helps researchers, students, and funding agencies interact with scientific papers and media coverage through natural language. <with a just clicks and extremmly fast setup, build your own chatbot for your research lab!>
+LabRAG is an intelligent chatbot that helps researchers, students, stakeholders, and general audience to interact with scientific papers and media coverage through natural language.
+With just a few clicks and extremely fast setup, build your own research assistant chatbot for your lab!
 
 ## Architecture Overview
 
@@ -246,8 +247,6 @@ This script:
    - Stores in FAISS for fast similarity search
    - Preserves metadata for source attribution
 
-### Step 2: Configuration
-
 Edit `configs/default.yml` to specify your data sources:
 
 ```yaml
@@ -262,10 +261,20 @@ lab_description: |
   Include key topics, methodologies, and significance.
 ```
 
+### Step 2: AI Assistant Usage
+
+Once the vector store is built, you're ready  to interact with LabRAG through two modes:
+
+- **Research Mode**: Ask research questions about the lab research and get comprehensive answers with source citations
+- **Chat Mode**: Conversational interactions with session memory for follow-up questions and clarifications
+
+All responses include direct citations, media references, and transparent reasoning steps.
+
 ## 🎯 Usage Examples
 
 ### Research Queries
-```
+
+```text
 "What genes are important for human genetic adaptation in the Amazon Rainforest? Please list the methods used to support these findings."
 
 # Follow up question - it will use the session memory (chat history with the past messages)
@@ -275,7 +284,8 @@ lab_description: |
 ```
 
 ### Media Analysis  
-```
+
+```text
 "How is the research covered in the media?"
 "Look for inconsistencies between the media coverage and the paper about genetic adaptation to Chagas disease"
 ```
@@ -283,6 +293,7 @@ lab_description: |
 ## Pre-built Knowledge Base
 
 LabRAG comes with a **sample knowledge base** featuring:
+
 - Research papers on genetic adaptation and disease resistance
 - Media coverage from scientific outlets
 - Ready-to-use FAISS index with embeddings
@@ -312,7 +323,7 @@ Customize prompts in `configs/prompts.yml`:
 
 ### Project Structure
 
-```
+```bash
 labrag/
 ├── 📁 labrag/                       # Main Python package
 │   ├── 🤖 agents/                   # LangGraph agentic workflow
