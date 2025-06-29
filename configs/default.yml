@@ -1,0 +1,10 @@
+data_sources:
+  papers_dir: "data/raw/papers" # Where users put their raw PDF files
+  media_urls:
+    - "https://revistapesquisa.fapesp.br/en/natural-defense-against-chagas/"
+    - "https://www.science.org/content/article/indigenous-groups-amazon-evolved-resistance-deadly-chagas"
+    - "https://www.upf.edu/en/web/focus/noticies/-/asset_publisher/qOocsyZZDGHL/content/les-poblacions-de-l-amazones-resisteixen-la-infecci%C3%B3-de-chagas-gr%C3%A0cies-a-les-seves-adaptacions-gen%C3%A8tiques/10193/maximized"
+
+# TODO: Add lab description to the prompt templates dynamically
+lab_description: |
+  Papers and media coverage from Cainã Max Couto da Silva's work.
