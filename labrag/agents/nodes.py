@@ -104,7 +104,7 @@ async def synthesizer_node(state: SessionState) -> dict[str, Any]:
     conversation_context = get_chat_history(state.messages)
 
     llm = init_chat_model(
-        "gpt-4o", model_provider="openai", temperature=0.7
+        "gpt-4.1", model_provider="openai", temperature=0.7
     ).with_structured_output(method="json_mode")
 
     prompt_template = load_prompt_templates()["research_synthesis_prompt"]
