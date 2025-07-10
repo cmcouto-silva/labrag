@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.4
 FROM python:3.13-slim
 
 WORKDIR /app
@@ -20,18 +21,15 @@ COPY pyproject.toml uv.lock README.md ./
 # Install dependencies  
 RUN uv sync --all-extras --frozen
 
-# Copy the rest of the application
+# Copy the rest of the application 
 COPY . .
 
-# Create necessary directories
-RUN mkdir -p data/vector_store data/raw/papers
+# Set environment variables so the virtual environment is active by default
+ENV VIRTUAL_ENV=/app/.venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Expose ports
 EXPOSE 8000 8501
-
-# Activate the virtual environment
-ENV VIRTUAL_ENV=/app/.venv
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Default command (will be overridden in docker-compose)
 CMD ["uvicorn", "labrag.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

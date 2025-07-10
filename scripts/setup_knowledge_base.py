@@ -5,12 +5,12 @@ import argparse
 import asyncio
 import traceback
 
-import dotenv
+from dotenv import load_dotenv
 from loguru import logger
 
 from labrag.ingestion.knowledge_base import KnowledgeBaseBuilder
 
-dotenv.load_dotenv()
+load_dotenv()
 
 
 async def main() -> int | None:

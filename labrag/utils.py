@@ -3,7 +3,7 @@
 import tomllib
 from pathlib import Path
 
-from .config import get_papers_folder
+from labrag.config import get_papers_folder
 
 
 def ensure_directories() -> None:

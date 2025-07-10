@@ -10,7 +10,13 @@ services:
     volumes:
       - ./data:/app/data
       - ./configs:/app/configs
-    command: uvicorn labrag.api.main:app --host 0.0.0.0 --port 8000 --reload
+    command: >
+      sh -c "
+        echo 'Setting up knowledge base...' &&
+        uv run scripts/setup_knowledge_base.py &&
+        echo 'Starting API server...' &&
+        uvicorn labrag.api.main:app --host 0.0.0.0 --port 8000 --reload
+      "
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
       interval: 30s
@@ -70,9 +76,14 @@ services:
     container_name: labrag-tunnel
     env_file:
       - .env
-    command: tunnel run --token ${CLOUDFLARE_TOKEN}
-    network_mode: host
+    command: tunnel run --protocol http2 --token ${CLOUDFLARE_TOKEN}
     restart: unless-stopped
+    network_mode: host
+    depends_on:
+      api:
+        condition: service_healthy
+      app:
+        condition: service_healthy
 
 networks:
   labrag-network:

@@ -21,6 +21,12 @@ def initialize_session_state() -> None:
     """Initialize session state variables."""
     if "session_id" not in st.session_state:
         st.session_state.session_id = str(uuid.uuid4())
+    # Ensure the conversation list exists
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+    # Track how many questions have been asked
+    if "total_questions" not in st.session_state:
+        st.session_state.total_questions = 0
 
 
 def clear_conversation() -> None:
