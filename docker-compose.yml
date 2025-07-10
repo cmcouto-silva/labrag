@@ -12,7 +12,7 @@ services:
       - ./configs:/app/configs
     command: uvicorn labrag.api.main:app --host 0.0.0.0 --port 8000 --reload
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -25,21 +25,55 @@ services:
     container_name: labrag-app
     ports:
       - "8501:8501"
+    env_file:
+      - .env
     environment:
-      - LABRAG_API_URL=http://api:8000/chat/
+      - LABRAG_API_URL=${LABRAG_BASE_URL}api/chat/
     command: >
       sh -c "
         echo 'Waiting for API to be ready...' &&
         sleep 5 &&
         echo 'Starting Streamlit app...' &&
-        streamlit run labrag/app/main.py --server.port=8501 --server.address=0.0.0.0
+        streamlit run labrag/integrations/streamlit/main.py --server.port=8501 --server.address=0.0.0.0
       "
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     depends_on:
       api:
         condition: service_healthy
     networks:
       - labrag-network
 
+  # Slack Integration Service
+  slack:
+    build: .
+    container_name: labrag-slack
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    environment:
+      - API_BASE_URL=http://api:8000
+    command: uvicorn labrag.integrations.slack.main:app --host 0.0.0.0 --port 8001 --reload
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - labrag-network
+
+  # Cloudflare Tunnel Service
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: labrag-tunnel
+    env_file:
+      - .env
+    command: tunnel run --token ${CLOUDFLARE_TOKEN}
+    network_mode: host
+    restart: unless-stopped
+
 networks:
   labrag-network:
-    driver: bridge 
+    driver: bridge

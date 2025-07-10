@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 WORKDIR /app
 
@@ -34,4 +34,4 @@ ENV VIRTUAL_ENV=/app/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Default command (will be overridden in docker-compose)
-CMD ["uvicorn", "labrag.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"] 
+CMD ["uvicorn", "labrag.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

@@ -193,7 +193,7 @@ cp .env.example .env
 uvicorn labrag.api.main:app --reload --port 8000
 
 # Terminal 2 - Frontend  
-streamlit run labrag/app/main.py --server.port 8501
+streamlit run labrag/integrations/streamlit/main.py --server.port 8501
 ```
 
 ## Required API Keys
@@ -336,8 +336,13 @@ labrag/
 │   │   └── routes/                  # API endpoint definitions
 │   │       ├── chat.py              # Chat interaction endpoints
 │   │       └── health.py            # Health check endpoints
-│   ├── 🎨 app/                      # Streamlit frontend
-│   │   └── main.py                  # UI application entry point
+│   ├── 🔌 integrations/             # External integrations
+│   │   ├── slack/                   # Slack bot integration
+│   │   │   ├── app.py               # Slack app configuration
+│   │   │   ├── main.py              # Slack service entry point
+│   │   │   └── utils.py             # Slack utilities
+│   │   └── streamlit/               # Streamlit web interface
+│   │       └── main.py              # UI application entry point
 │   ├── 📚 ingestion/                # Document processing pipeline
 │   │   ├── knowledge_base.py        # Knowledge base builder orchestrator
 │   │   ├── loaders/                 # Document loading utilities
@@ -398,6 +403,12 @@ labrag/
 - FastAPI application with automatic OpenAPI documentation
 - Handles chat interactions and system health monitoring
 - Designed for easy integration with external applications
+
+🔌 **`labrag/integrations/`** - External platform integrations
+
+- `streamlit/`: Web-based user interface with enhanced chat experience
+- `slack/`: Slack bot integration for team collaboration
+- Modular design allows easy addition of new platforms (Discord, Teams, etc.)
 
 📚 **`labrag/ingestion/`** - Document processing pipeline
 

@@ -37,7 +37,7 @@ async def intent_classifier_node(state: SessionState) -> dict[str, Any]:
 
     return {
         "intent": intent,
-        "reasoning": f"**Step 1. Intent classification —** {intent}\n\n",
+        "reasoning": f"**Step 1. Intent classification** — {intent}\n\n",
     }
 
 
@@ -49,7 +49,7 @@ async def chat_agent_node(state: SessionState) -> dict[str, Any]:
     # Get conversation history for context
     conversation_context = get_chat_history(state.messages)
 
-    llm = init_chat_model("gpt-4.1-mini", model_provider="openai")
+    llm = init_chat_model("gpt-4.1", model_provider="openai", temperature=0.5)
 
     prompt = load_prompt_templates()["chat_agent_system_prompt"].format(
         conversation_context=conversation_context, latest_message=latest_message
@@ -72,7 +72,6 @@ async def retriever_node(
 
     logger.debug(f"Document retrieval query: {latest_message[:50]}...")
 
-    # Execute retrieval (vector search with embeddings could be async)
     docs = await vector_store.asearch(latest_message, k=30)
     sources = format_sources_with_pages(docs)
 
@@ -82,8 +81,8 @@ async def retriever_node(
     )
 
     reasoning = (
-        state.reasoning + f"**Step 2. Document Retrieval —** Retrieved {len(docs)} "
-        f"documents from {len(sources)} sources\n"
+        state.reasoning + f"**Step 2. Document Retrieval** — Retrieved {len(docs)} "
+        f"documents chunks from {len(sources)} sources\n"
     )
 
     return {
@@ -133,12 +132,12 @@ async def synthesizer_node(state: SessionState) -> dict[str, Any]:
         formatted_answer += "\n"
 
     state.reasoning += (
-        f"\n**Step 3. Response Synthesis —** Synthesized response based on "
-        f"{len(document_analysis)} document chunks with proper citations:\n"
+        f"\n**Step 3. Response Synthesis:** Synthesized response based on "
+        f"{len(document_analysis)} document chunks with proper citations.\n\n"
     )
 
     if document_analysis:
-        formatted_answer += "## Reasoning\n" + state.reasoning
+        formatted_answer += "## Reasoning\n\n" + state.reasoning
         for analysis in document_analysis:
             source = analysis.get("source", "N/A")
             page = analysis.get("page", "N/A")

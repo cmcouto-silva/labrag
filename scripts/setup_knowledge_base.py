@@ -3,8 +3,14 @@
 
 import argparse
 import asyncio
+import traceback
+
+import dotenv
+from loguru import logger
 
 from labrag.ingestion.knowledge_base import KnowledgeBaseBuilder
+
+dotenv.load_dotenv()
 
 
 async def main() -> int | None:
@@ -20,7 +26,9 @@ async def main() -> int | None:
         builder = KnowledgeBaseBuilder()
         await builder.build_from_config(args.config, force=args.force)
 
-    except Exception:
+    except Exception as e:
+        logger.error(f"Error: {e}")
+        traceback.print_exc()
         return 1
 
 
